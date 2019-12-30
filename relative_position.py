@@ -19,9 +19,13 @@ class relative_position(nn.Module):
 
         return embeddings
 
-r_k = self.relative_position(Q_.size()[1], K_.size()[1])
-outputs = outputs + torch.bmm(Q_.permute(1, 0, 2), r_k.permute(0, 2, 1)).permute(1, 0, 2)
-        
-r_v = self.relative_position(Q_.size()[1], V_.size()[1])
-outputs = outputs + torch.bmm(weights.permute(1, 0, 2), r_v).permute(1, 0, 2)
+
+r_k = self.relative_position(Q.size()[1], K_.size()[1])
+outputs = outputs + torch.bmm(Q.permute(1, 0, 2), r_k.permute(0, 2, 1)).permute(1, 0, 2)
+#outputs  = Q*K^T
+                                                      
+r_v = self.relative_position(Q.size()[1], V.size()[1])
+outputs2 = outputs + torch.bmm(weights.permute(1, 0, 2), r_v).permute(1, 0, 2)
 #the size of Q,K,V is [heads*batch,length,dim//heads]
+#theoutputs is origin self-attention, weights is the self-attention not multiplied by V
+#the implementation is excerpted from my model, so the variable name may be confused:-)
