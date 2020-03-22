@@ -1,7 +1,7 @@
-class relative_position(nn.Module):
+class RelativePosition(nn.Module):
 
     def __init__(self, num_units, max_relative_position):
-        super(relative_position, self).__init__()
+        super().__init__()
         self.num_units = num_units
         self.max_relative_position = max_relative_position
         self.embeddings_table = Parameter(torch.Tensor(max_relative_position * 2 + 1, num_units)
@@ -19,8 +19,8 @@ class relative_position(nn.Module):
         return embeddings
 
 
-self.relative_position_k = relative_position(i, self.d_k, max_relative_position)
-self.relative_position_v = relative_position(i, self.d_v, max_relative_position)
+self.relative_position_k = RelativePosition(i, self.d_k, max_relative_position)
+self.relative_position_v = RelativePosition(i, self.d_v, max_relative_position)
 
 r_q = q.permute(2, 0, 1, 3).contiguous().view(len_q, sz_b*n_head, d_k)
 r_k = self.relative_position_k(len_q, len_k)
