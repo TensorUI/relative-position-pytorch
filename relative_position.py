@@ -17,3 +17,17 @@ class relative_position(nn.Module):
         embeddings = self.embeddings_table[final_mat].cuda()
 
         return embeddings
+
+
+self.relative_position_k = relative_position(i, self.d_k, max_relative_position)
+self.relative_position_v = relative_position(i, self.d_v, max_relative_position)
+
+r_q = q.permute(2, 0, 1, 3).contiguous().view(len_q, sz_b*n_head, d_k)
+r_k = self.relative_position_k(len_q, len_k)
+attn_2 = torch.matmul(r_q, r_k.transpose(1, 2)).transpose(0, 1)
+attn_2 = attn_2.contiguous().view(sz_b, self.n_head, len_k, len_k)
+
+r_v = self.relative_position_v(len_q, len_v)
+weight = attn.permute(2, 0, 1, 3).contiguous().view(len_q, sz_b*n_head, len_k)
+weight = torch.matmul(weight, r_v)
+weight = weight.transpose(0, 1).contiguous().view(sz_b, self.n_head, len_q, d_v)
