@@ -4,7 +4,7 @@ class RelativePosition(nn.Module):
         super().__init__()
         self.num_units = num_units
         self.max_relative_position = max_relative_position
-        self.embeddings_table = Parameter(torch.Tensor(max_relative_position * 2 + 1, num_units)
+        self.embeddings_table = nn.Parameter(torch.Tensor(max_relative_position * 2 + 1, num_units))
         nn.init.xavier_uniform_(self.embeddings_table)
 
     def forward(self, length_q, length_k):
